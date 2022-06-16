@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+{{ msg }}
+<br><br>
+<div>
+    <form action="" method="post">
+        <p><label for="email">Write your email!</label></p>
+        <p><input type="email" id="email" name="email"><br></p>
+        <p><label for="password">Write your Password!</label></p>
+        <p><input type="password" id="password" name="password"><br></p>
+        <input type="submit" value="Вход">
+    </form>
+    <a href="{{ url_for('register') }}">Регистрация</a>
+</div>
+{% endblock %}
