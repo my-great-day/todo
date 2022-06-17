@@ -1,25 +1,12 @@
-from flask import render_template, request, redirect, url_for, make_response, session
+from flask import render_template, request, redirect, url_for, session
 
 from app import db, todo
-from .models import Content, Users
+from app.models import Content, Users
 
 
 @todo.route('/')
 def index():
     return render_template('index.html')
-
-
-@todo.route('/sessions/')
-def sessions():
-    ses = 'im session!'
-    session['todo'] = ses
-    return f'name session {session.get("todo")}'
-
-
-@todo.route('/delete-sessions/')
-def delete_sessions():
-    session.pop('todo', None)
-    return f'name session {session.get("todo")}'
 
 
 @todo.route('/add_todo/<id>', methods=['post', 'get'])

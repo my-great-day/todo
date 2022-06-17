@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from .views import db
+from app.main.views import db
 
 
 class Content(db.Model):
