@@ -113,7 +113,6 @@ def logins():
     if not user:
         return jsonify("Wrong username or password"), 401
 
-    # Notice that we are passing in the actual sqlalchemy user object here
     access_token = create_access_token(identity=user)
     return jsonify(access_token=access_token)
 
@@ -121,7 +120,6 @@ def logins():
 @todo.route("/get_res", methods=["GET"])
 @jwt_required()
 def protected():
-    # We can now access our sqlalchemy User object via `current_user`.
     return jsonify(
         id=current_user.id,
         name=current_user.name,
