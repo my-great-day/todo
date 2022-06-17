@@ -1,6 +1,7 @@
-from flask import render_template, request, redirect, url_for, session
+from flask import render_template, request, redirect, url_for, session, jsonify
+from flask_jwt_extended import create_access_token, current_user, jwt_required
 
-from app import db, todo
+from app import db, todo, jwt
 from app.models import Content, Users
 
 
@@ -19,11 +20,11 @@ def add_todo(id):
             db.session.add(content)
             db.session.commit()
             msg = 'Текст добавлено!'
-            return redirect(url_for('add_todo', id=id))
+            return redirect(url_for('.add_todo', id=id))
         incomplete_list = Content.query.filter_by(check_mark=False, check_slug=id.lower()).all()
         complete_list = Content.query.filter_by(check_mark=True, check_slug=id.lower()).all()
     else:
-        return redirect(url_for('login'))
+        return redirect(url_for('.login'))
     return render_template('add_todo.html', msg=msg, incomplete_list=incomplete_list,
                            complete_list=complete_list, users=id)
 
@@ -46,11 +47,19 @@ def register():
         session.pop('todo')
     reg = request.form.get('email')
     if reg is not None and reg != '':
-        content = Users(name=request.form.get('name'), slug=reg.lower(), email=reg, key=request.form.get('password'))
-        db.session.add(content)
-        db.session.commit()
-        session['todo'] = reg
-        return redirect(url_for('add_todo', id=reg))
+        email = request.form.get('email')
+        msg = log_test(email=email, password=request.form.get('password'))
+        if msg == 'OK':
+            session['todo'] = email
+            return redirect(url_for('.add_todo', id=email))
+
+        else:
+            content = Users(name=request.form.get('name'), slug=reg.lower(), email=reg,
+                            key=request.form.get('password'))
+            db.session.add(content)
+            db.session.commit()
+            session['todo'] = reg
+            return redirect(url_for('.add_todo', id=reg))
     return render_template('register.html')
 
 
@@ -64,7 +73,7 @@ def login():
         msg = log_test(email=email, password=request.form.get('password'))
         if msg == 'OK':
             session['todo'] = email
-            return redirect(url_for('add_todo', id=email))
+            return redirect(url_for('.add_todo', id=email))
     return render_template('login.html', msg=msg)
 
 
@@ -73,7 +82,7 @@ def complete(user, id):
     comp = Content.query.filter_by(id=int(id)).first()
     comp.check_mark = True
     db.session.commit()
-    return redirect(url_for('add_todo', id=user))
+    return redirect(url_for('.add_todo', id=user))
 
 
 @todo.route('/delete/<user>/<id>')
@@ -81,4 +90,41 @@ def delete(user, id):
     comp = Content.query.filter_by(id=int(id)).first()
     db.session.delete(comp)
     db.session.commit()
-    return redirect(url_for('add_todo', id=user))
+    return redirect(url_for('.add_todo', id=user))
+
+
+@jwt.user_identity_loader
+def user_identity_lookup(user):
+    return user.id
+
+
+@jwt.user_lookup_loader
+def user_lookup_callback(_jwt_header, jwt_data):
+    identity = jwt_data["sub"]
+    return Users.query.filter_by(id=identity).one_or_none()
+
+
+@todo.route("/logins", methods=["POST"])
+def logins():
+    name = request.json.get("username", None)
+
+    user = Users.query.filter_by(name=name).one_or_none()
+    print(user)
+    if not user:
+        return jsonify("Wrong username or password"), 401
+
+    # Notice that we are passing in the actual sqlalchemy user object here
+    access_token = create_access_token(identity=user)
+    return jsonify(access_token=access_token)
+
+
+@todo.route("/get_res", methods=["GET"])
+@jwt_required()
+def protected():
+    # We can now access our sqlalchemy User object via `current_user`.
+    return jsonify(
+        id=current_user.id,
+        name=current_user.name,
+        email=current_user.email,
+        password=current_user.key,
+    )

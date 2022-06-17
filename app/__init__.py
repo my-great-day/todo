@@ -13,8 +13,11 @@ jwt = JWTManager(todo)
 # инициализирует расширения
 db = SQLAlchemy(todo)
 
+# регистрация blueprints
+from .main import todo as main_blueprint
+todo.register_blueprint(main_blueprint)
 
 # import views
-from .main import views
+
 # from . import forum_views
 # from . import admin_views

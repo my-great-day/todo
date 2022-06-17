@@ -1,5 +1,10 @@
-{% extends 'base.html' %}
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Todo</title>
+</head>
+<body>
 {{ msg }}
 <br><br>
 <div>
@@ -10,6 +15,7 @@
         <p><input type="password" id="password" name="password"><br></p>
         <input type="submit" value="Вход">
     </form>
-    <a href="{{ url_for('register') }}">Регистрация</a>
+    <a href="{{ url_for('.register') }}">Регистрация</a>
 </div>
-{% endblock %}
+</body>
+

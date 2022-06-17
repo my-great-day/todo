@@ -1,12 +1,11 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Todo</title>
-    {% block content %}
 </head>
     <body>
-    <a href="{{ url_for('login') }}">Выход</a>
+    <a href="{{ url_for('.login') }}">Выход</a>
         <div>
             <form method="post">
                 <h3><label for="text">Write your Todo here&nbsp</label>
@@ -22,8 +21,8 @@
             <h2>Incomplete tasks</h2>
             <ol>
                 {% for todo in incomplete_list %}
-                <li style="font-size: 25px">{{ todo.text|capitalize }} &nbsp {{ todo.create_on }} &nbsp <a class="active" href="{{ url_for('complete', user=users, id=todo.id) }}">Complete</a>
-                    <a class="active" href="{{ url_for('delete',user=users, id=todo.id) }}">Delete</a></li><br>
+                <li style="font-size: 25px">{{ todo.text|capitalize }} &nbsp {{ todo.create_on }} &nbsp <a class="active" href="{{ url_for('.complete', user=users, id=todo.id) }}">Complete</a>
+                    <a class="active" href="{{ url_for('.delete',user=users, id=todo.id) }}">Delete</a></li><br>
                 {% endfor %}
             </ol>
         </div>
@@ -33,10 +32,9 @@
             <h2>Complete tasks</h2>
             <ol>
             {% for todo in complete_list %}
-                <li style="font-size: 25px">{{ todo.text|title }} &nbsp {{ todo.create_on }} &nbsp <a class="active" href="{{ url_for('delete',user=users, id=todo.id) }}">Delete</a></li><br>
+                <li style="font-size: 25px">{{ todo.text|title }} &nbsp {{ todo.create_on }} &nbsp <a class="active" href="{{ url_for('.delete',user=users, id=todo.id) }}">Delete</a></li><br>
             {% endfor %}
             </ol>
         </div>
-        {% endblock %}
     </body>
 </html>
