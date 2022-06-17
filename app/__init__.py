@@ -15,7 +15,10 @@ db = SQLAlchemy(todo)
 
 # регистрация blueprints
 from .main import todo as main_blueprint
+from .main import api
+
 todo.register_blueprint(main_blueprint)
+todo.register_blueprint(api, url_prefix='/api')
 
 # import views
 

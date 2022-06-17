@@ -102,27 +102,3 @@ def user_identity_lookup(user):
 def user_lookup_callback(_jwt_header, jwt_data):
     identity = jwt_data["sub"]
     return Users.query.filter_by(id=identity).one_or_none()
-
-
-@todo.route("/logins", methods=["POST"])
-def logins():
-    name = request.json.get("username", None)
-
-    user = Users.query.filter_by(name=name).one_or_none()
-    print(user)
-    if not user:
-        return jsonify("Wrong username or password"), 401
-
-    access_token = create_access_token(identity=user)
-    return jsonify(access_token=access_token)
-
-
-@todo.route("/get_res", methods=["GET"])
-@jwt_required()
-def protected():
-    return jsonify(
-        id=current_user.id,
-        name=current_user.name,
-        email=current_user.email,
-        password=current_user.key,
-    )
