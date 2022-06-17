@@ -9,19 +9,6 @@ def index():
     return render_template('index.html')
 
 
-@todo.route('/sessions/')
-def sessions():
-    ses = 'im session!'
-    session['todo'] = ses
-    return f'name session {session.get("todo")}'
-
-
-@todo.route('/delete-sessions/')
-def delete_sessions():
-    session.pop('todo', None)
-    return f'name session {session.get("todo")}'
-
-
 @todo.route('/add_todo/<id>', methods=['post', 'get'])
 def add_todo(id):
     print(id, '\n', session.get('todo'))
