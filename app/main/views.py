@@ -79,7 +79,7 @@ def login():
 
 @todo.route('/complete/<user>/<id>')
 def complete(user, id):
-    comp = Content.query.filter_by(id=int(id)).first()
+    comp = Users.query.filter_by(id=int(id)).first()
     comp.check_mark = True
     db.session.commit()
     return redirect(url_for('.add_todo', id=user))
