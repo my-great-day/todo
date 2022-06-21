@@ -15,7 +15,7 @@ def logins():
     username = request.json.get("username", None)
     password = request.json.get("username", None)
 
-    user = Users.query.filter_by(email=username).one_or_none()
+    user = Users.query.filter_by(email=email).one_or_none()
     key = Users.query.filter_by(key=password).one_or_none()
     if not user and not key:
         return jsonify("Wrong username or password"), 401
