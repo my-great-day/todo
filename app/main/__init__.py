@@ -12,13 +12,13 @@ from ..models import Users, Content
 
 @api.route("/login", methods=["POST"])
 def logins():
-    username = request.json.get("username", None)
+    email = request.json.get("email", None)
     password = request.json.get("username", None)
 
     user = Users.query.filter_by(email=email).one_or_none()
     key = Users.query.filter_by(key=password).one_or_none()
     if not user and not key:
-        return jsonify("Wrong username or password"), 401
+        return jsonify("Wrong email or password"), 401
 
     access_token = create_access_token(identity=user)
     return jsonify(access_token=access_token)
