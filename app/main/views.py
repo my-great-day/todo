@@ -1,7 +1,6 @@
-from flask import render_template, request, redirect, url_for, session, jsonify
-from flask_jwt_extended import create_access_token, current_user, jwt_required
+from flask import render_template, request, redirect, url_for, session
 
-from app import db, todo, jwt
+from app import db, todo
 from app.models import Content, Users
 
 
@@ -12,7 +11,6 @@ def index():
 
 @todo.route('/add_todo/<id>', methods=['post', 'get'])
 def add_todo(id):
-    print(id, '\n', session.get('todo'))
     msg = ''
     if id == session.get('todo'):
         if request.form.get('add_text') is not None and request.form.get('add_text') != '':
@@ -35,9 +33,9 @@ def log_test(email, password):
         if email == data[0][0] and password == data[0][1]:
             msg = 'OK'
         else:
-            msg = 'Не правилный логин или пороль!!'
+            msg = 'Incorrect login or password!!'
     except IndexError:
-        msg = 'Не правилный логин или пороль!!'
+        msg = 'Incorrect login or password!!'
     return msg
 
 
@@ -74,6 +72,7 @@ def login():
         if msg == 'OK':
             session['todo'] = email
             return redirect(url_for('.add_todo', id=email))
+
     return render_template('login.html', msg=msg)
 
 
@@ -91,14 +90,3 @@ def delete(user, id):
     db.session.delete(comp)
     db.session.commit()
     return redirect(url_for('.add_todo', id=user))
-
-
-@jwt.user_identity_loader
-def user_identity_lookup(user):
-    return user.id
-
-
-@jwt.user_lookup_loader
-def user_lookup_callback(_jwt_header, jwt_data):
-    identity = jwt_data["sub"]
-    return Users.query.filter_by(id=identity).one_or_none()

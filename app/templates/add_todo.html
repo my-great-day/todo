@@ -1,40 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Todo</title>
-</head>
-    <body>
-    <a href="{{ url_for('.login') }}">Выход</a>
-        <div>
-            <form method="post">
-                <h3><label for="text">Write your Todo here&nbsp</label>
-                <input type="text" id="text" name="add_text" placeholder="Write" >
-                <input type="submit" value="Add"></h3>
+{% extends "base.html" %}
+{% block content %}
+<div class="mx-auto" style="width: 900px;">
+    <div>
+        <div class="input-group mb-3">
+            <form method="post" class="input-group mb-3">
+                <label for="text" class="col-sm-12 col-form-label">Write your Todo here</label>
+                <input type="text" id="text" name="add_text" placeholder="Write" class="form-control">
+                <input type="submit" value="Add" class="btn btn-outline-primary mb-sm-0">
             </form>
-
-        <p>{{ msg }}</p>
-
-
-
-
-            <h2>Incomplete tasks</h2>
-            <ol>
-                {% for todo in incomplete_list %}
-                <li style="font-size: 25px">{{ todo.text|capitalize }} &nbsp {{ todo.create_on }} &nbsp <a class="active" href="{{ url_for('.complete', user=users, id=todo.id) }}">Complete</a>
-                    <a class="active" href="{{ url_for('.delete',user=users, id=todo.id) }}">Delete</a></li><br>
-                {% endfor %}
-            </ol>
         </div>
+
+        <h2>Incomplete tasks</h2>
+        <ol>
+            {% for todo in incomplete_list %}
+            <li style="font-size: 25px">{{ todo.text|capitalize }} &nbsp {{ todo.create_on }} &nbsp <a href="{{ url_for('.complete', user=users, id=todo.id) }}" class="btn btn-outline-primary">Complete</a>
+                <a  href="{{ url_for('.delete',user=users, id=todo.id) }}" class="btn btn-outline-primary">Delete</a></li><br>
+            {% endfor %}
+        </ol>
+    </div>
 <hr>
 
-        <div>
-            <h2>Complete tasks</h2>
-            <ol>
-            {% for todo in complete_list %}
-                <li style="font-size: 25px">{{ todo.text|title }} &nbsp {{ todo.create_on }} &nbsp <a class="active" href="{{ url_for('.delete',user=users, id=todo.id) }}">Delete</a></li><br>
-            {% endfor %}
-            </ol>
-        </div>
-    </body>
-</html>
+    <div>
+        <h2>Complete tasks</h2>
+        <ol>
+        {% for todo in complete_list %}
+            <li style="font-size: 25px">{{ todo.text|title }} &nbsp {{ todo.create_on }} &nbsp<a href="{{ url_for('.delete',user=users, id=todo.id) }}" class="btn btn-outline-primary">Delete</a></li><br>
+        {% endfor %}
+        </ol>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,22 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Todo</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
 {{ msg }}
-<br><br>
-<div>
-    <form action="" method="post">
-        <p><label for="name">Write your name!</label></p>
-        <p><input type="text" id="name" name="name"><br></p>
-        <p><label for="email">Write your email!</label></p>
-        <p><input type="email" id="email" name="email"><br></p>
-        <p><label for="password">Write your Password!</label></p>
-        <p><input type="password" id="password" name="password"><br></p>
-        <input type="submit" value="Send">
+<div class="mx-auto" style="width: 450px;">
+    <p class="fw-normal">{{ msg }}</p>
+
+    <form method="post" class="input-group mb-3">
+        <div class="input-group mb-3">
+           <label for="username" class="col-sm-2 col-form-label">Username</label>
+            <input type="text" name="name" id="username" class="form-control">
+        </div>
+
+        <div class="input-group mb-3">
+           <label for="email" class="col-sm-2 col-form-label">Email</label>
+            <input type="email" name="email" id="email" class="form-control">
+        </div>
+
+        <div class="input-group mb-3">
+            <label for="password" class="col-sm-2 col-form-label">Password</label>
+            <input type="password" id="password" name="password" class="form-control">
+        </div>
+
+        <div class="d-grid gap-2 col-6 mx-auto">
+        <input type="submit" value="Sign up" class="btn btn-outline-primary mb-3 dropdown-center">
+        </div>
     </form>
-    <a href="{{ url_for('.login') }}">Вход</a>
+
+        <div class="d-grid gap-2 col-6 mx-auto">
+            <a href="{{ url_for('.login') }}" class="btn btn-outline-primary">Sing in</a>
+        </div>
 </div>
-</body>
+{% endblock %}

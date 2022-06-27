@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
- <title>Todo</title>
-</head>
-<body>
-<ul>
- <li> <a href="{{ url_for('.login') }}">Вход</a></li>
-  <li><a href="{{ url_for('.register') }}">Зарегистрироваця</a></li>
-</ul>
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+<h1>Welcome to todo!</h1>
+{% endblock %}
