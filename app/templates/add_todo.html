@@ -13,7 +13,7 @@
         <h2>Incomplete tasks</h2>
         <ol>
             {% for todo in incomplete_list %}
-            <li style="font-size: 25px">{{ todo.text|capitalize }} &nbsp {{ todo.create_on }} &nbsp <a href="{{ url_for('.complete', user=users, id=todo.id) }}" class="btn btn-outline-primary">Complete</a>
+            <li style="font-size: 25px">{{ todo.text|capitalize }} &nbsp| {{ todo.create_on }} &nbsp <a href="{{ url_for('.complete', user=users, id=todo.id) }}" class="btn btn-outline-primary">Complete</a>
                 <a  href="{{ url_for('.delete',user=users, id=todo.id) }}" class="btn btn-outline-primary">Delete</a></li><br>
             {% endfor %}
         </ol>
